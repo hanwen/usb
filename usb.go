@@ -500,7 +500,11 @@ func (c *Context) GetDeviceList() (DeviceList, error) {
 	if count < 0 {
 		return nil, Error(count)
 	}
-	slice := &reflect.SliceHeader{uintptr(unsafe.Pointer(devs)), int(count), int(count)}
+	slice := &reflect.SliceHeader{
+		Data: uintptr(unsafe.Pointer(devs)),
+		Len:  int(count),
+		Cap:  int(count),
+	}
 	rdevs := *(*[]*Device)(unsafe.Pointer(slice))
 	return DeviceList(rdevs), nil
 }
